@@ -23,7 +23,7 @@ public class MainMenuManager : MonoBehaviour
         //Debug.Log("Partidas jugadas: " + partidasJugadas);
         if (partidasJugadas >= 3 && partidasJugadas < 99)
         {
-            secondRoundText.SetActive(true);
+            //secondRoundText.SetActive(true);
         }
         else if(partidasJugadas >= 99) //Para deshabilitar el botón de jugar cuando se hayan realizado "x" partidas
         {

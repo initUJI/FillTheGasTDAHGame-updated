@@ -169,18 +169,22 @@ public class FluidGameManager : MonoBehaviour
                 string resultadoPrueba = "";
                 if (particleCounter >= 190)
                 {
-                    resultadoPrueba = "¡Excelente!";
+                    resultadoPrueba = "¡Los estás haciendo excelente!";
                     SessionManager.instance.SumarPuntosAlTotal(100);
                 }
                 else if (particleCounter >= 150)
                 {
-                    resultadoPrueba = "Bien";
+                    resultadoPrueba = "¡Vas mejorando!";
                     SessionManager.instance.SumarPuntosAlTotal(50);
+                }
+                else if (particleCounter >= 1)
+                {
+                    resultadoPrueba = "¡Ánimo! ¡Sigue así!";
+                    SessionManager.instance.SumarPuntosAlTotal(25);
                 }
                 else
                 {
-                    resultadoPrueba = "¡Practica para mejorar!";
-                    SessionManager.instance.SumarPuntosAlTotal(25);
+                    resultadoPrueba = "¡Vuelve a intentarlo! ¡Tu puedes!";
                 }
 
                 SessionManager.instance.sucesionDeJuegos.RemoveAt(0);
@@ -189,8 +193,8 @@ public class FluidGameManager : MonoBehaviour
                 finishingPanel.transform.Find("Panel/Title").gameObject.GetComponent<Text>().text = "¡Terminado! " + completed + " / " + SessionManager.instance.totalGamesInSession;
 
                 //Editando texto de resultado
-                /*finishingPanel.transform.Find("Panel/Information/PointsText").gameObject.GetComponent<Text>().text = "Resultado: ";
-                finishingPanel.transform.Find("Panel/Information/PointsText/ResolutionText").gameObject.GetComponent<Text>().text = resultadoPrueba;*/
+                // finishingPanel.transform.Find("Panel/Information/PointsText").gameObject.GetComponent<Text>().text = "Resultado: ";
+                finishingPanel.transform.Find("Panel/Information/PointsText/ResolutionText").gameObject.GetComponent<Text>().text = resultadoPrueba;
 
                 //Editando texto de resultado adicional
                 finishingPanel.transform.Find("Panel/Information/AdditionalText").gameObject.GetComponent<Text>().text = "Gotas acertadas: " + particleCounter;

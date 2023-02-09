@@ -33,7 +33,7 @@ public class FinishTheSession : MonoBehaviour
         pointsExcelente = 300;
 
         //Se implementa el evento para continuar y salir al menú principal
-        string colorCode = "#ff0000ff";
+        string colorCode = "#ff6600";
         panel_UI.transform.Find("Buttons/ContinueButton").GetComponent<Button>().onClick.AddListener(() => continueButton());
         panel_UI.transform.Find("Buttons/ContinueButton/Title").GetComponent<Text>().text = "Continuar";
 
@@ -78,6 +78,6 @@ public class FinishTheSession : MonoBehaviour
         sessionManager.clearData();
         sessionManager.clearSuccesionList();
 
-        SceneManager.LoadScene("Graffiti");
+        SceneManager.LoadScene("Graffiti_New");
     }
 }

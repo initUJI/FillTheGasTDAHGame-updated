@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FluidGameManager : MonoBehaviour
 {
     //public Slider percentageSlider;
-    public Text percentageText, failedDropsText, timeText;
+    public Text percentageText, failedDropsText, timeText, DEBUG; //QUITAR DEBUG
     public float particleCounter, particlesToReach;
     int failedDrops, totalDrops;
 
@@ -18,12 +19,16 @@ public class FluidGameManager : MonoBehaviour
     public bool movingPoat;
 
     public bool hasStarted = false;
+    public bool _diestro = false;
     public GameObject gameplay_UI;
 
     public float gameplayTime, totalTimeToGo;
     public GameObject finishingPanel;
     private PartidaJugada partidaActual;
 
+    public Animator a_poatAnimator;
+    public GameObject _bigPoat;
+    public GameObject _smallPoat;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +41,7 @@ public class FluidGameManager : MonoBehaviour
         //Habilitar diestro/zurdo
         if(DataManager.instancia.isPlayerDiestro)
         {
+            _diestro = true;
             mainPlayerPoat.transform.localScale = new Vector3(-mainPlayerPoat.transform.localScale.x, mainPlayerPoat.transform.localScale.y, mainPlayerPoat.transform.localScale.z);
         }
     }
@@ -87,6 +93,9 @@ public class FluidGameManager : MonoBehaviour
                         totalTimeToGo = 60;
                         particlesToReach = 2500;
                         poatMovement.speedModifier = 0;
+                        a_poatAnimator.SetBool("MovRot", false);
+                        _bigPoat.SetActive(true);
+                        _smallPoat.SetActive(false);
                         break;
                     }
 
@@ -94,14 +103,20 @@ public class FluidGameManager : MonoBehaviour
                     {
                         totalTimeToGo = 60;
                         particlesToReach = 2500;
-                        poatMovement.speedModifier = 0.05f;   //  Quitar movimiento del recipiente a rellenar, es demasiado dificil para un niño
+                        //poatMovement.speedModifier = 0.05f;   //  Quitar movimiento del recipiente a rellenar, es demasiado dificil para un niño
+                        a_poatAnimator.SetBool("MovRot", true);
+                        _bigPoat.SetActive(true);
+                        _smallPoat.SetActive(false);
                         break;
                     }
                 case "Hard":
                     {
                         particlesToReach = 2500;
                         totalTimeToGo = 60;
-                        poatMovement.speedModifier = 0.15f;
+                        //poatMovement.speedModifier = 0.15f;
+                        a_poatAnimator.SetBool("MovRot", true);
+                        _bigPoat.SetActive(false);
+                        _smallPoat.SetActive(true);
                         break;
                     }
             }
@@ -128,7 +143,7 @@ public class FluidGameManager : MonoBehaviour
             GetComponent<UI_InGame_Manager>().setPauseButtonState(false);
 
 
-            LeanTween.scale(finishingPanel, new Vector3(1, 1, 1), 1);
+            LeanTween.scale(finishingPanel, new Vector3(2f, 2f, 1), 1);
 
             //Fill the panel with the info
             float valueToShow = (particleCounter / particlesToReach) * 100;

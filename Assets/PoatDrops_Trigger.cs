@@ -65,7 +65,7 @@ public class PoatDrops_Trigger : MonoBehaviour
             }
             else
             {
-                StopCoroutine(c_dropping);
+                if(c_dropping != null) StopCoroutine(c_dropping);
                 activated = false;
             }
         }

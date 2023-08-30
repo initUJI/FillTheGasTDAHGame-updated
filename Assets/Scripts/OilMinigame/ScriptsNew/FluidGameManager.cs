@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -32,7 +33,7 @@ public class FluidGameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        timeText.text = "00";
+        timeText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "time") + " 00";
         actualizarValorSlider(0);
         actualizarFailedDrops(0);
         DefineGameMode();
@@ -70,7 +71,7 @@ public class FluidGameManager : MonoBehaviour
         {
             //No se encuentra en una sesion
             poatToFill.transform.localScale = new Vector3(19.85877f, 21.01058f, 24.73227f);
-            totalTimeToGo = 60;
+            totalTimeToGo = 10;
             particlesToReach = 3500;
         }
         else
@@ -90,7 +91,7 @@ public class FluidGameManager : MonoBehaviour
             {
                 case "Easy":
                     {
-                        totalTimeToGo = 60;
+                        totalTimeToGo = 10;
                         particlesToReach = 2500;
                         poatMovement.speedModifier = 0;
                         a_poatAnimator.SetBool("MovRot", false);
@@ -101,7 +102,7 @@ public class FluidGameManager : MonoBehaviour
 
                 case "Medium":
                     {
-                        totalTimeToGo = 60;
+                        totalTimeToGo = 120;
                         particlesToReach = 2500;
                         //poatMovement.speedModifier = 0.05f;   //  Quitar movimiento del recipiente a rellenar, es demasiado dificil para un niño
                         a_poatAnimator.SetBool("MovRot", true);
@@ -112,7 +113,7 @@ public class FluidGameManager : MonoBehaviour
                 case "Hard":
                     {
                         particlesToReach = 2500;
-                        totalTimeToGo = 60;
+                        totalTimeToGo = 120;
                         //poatMovement.speedModifier = 0.15f;
                         a_poatAnimator.SetBool("MovRot", true);
                         _bigPoat.SetActive(false);
@@ -154,21 +155,21 @@ public class FluidGameManager : MonoBehaviour
             
             if (SessionManager.instance == null || (SessionManager.instance != null && SessionManager.instance.playingSession == false))
             {
-                finishingPanel.transform.Find("Panel/Title").gameObject.GetComponent<Text>().text = "¡Práctica terminada!";
+                finishingPanel.transform.Find("Panel/Title").gameObject.GetComponent<Text>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "endText");
 
                 //Editando texto de resultado
                 finishingPanel.transform.Find("Panel/Information/PointsText").gameObject.GetComponent<Text>().text = "";
                 finishingPanel.transform.Find("Panel/Information/PointsText/ResolutionText").gameObject.GetComponent<Text>().text = "";
 
                 //Editando texto de resultado adicional
-                finishingPanel.transform.Find("Panel/Information/AdditionalText").gameObject.GetComponent<Text>().text = "Gotas acertadas: " + particleCounter;
+                finishingPanel.transform.Find("Panel/Information/AdditionalText").gameObject.GetComponent<Text>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "drops") + " " + particleCounter;
 
                 double percent = (particleCounter / (particleCounter + failedDrops)) * 100;
-                finishingPanel.transform.Find("Panel/Information/TimeText").gameObject.GetComponent<Text>().text = "Litros acertados: "
-                    + liters.ToString("F2") + " litros";
+                finishingPanel.transform.Find("Panel/Information/TimeText").gameObject.GetComponent<Text>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "dataText") + " "
+                    + liters.ToString("F2") + " " + LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "litres");
 
 
-                finishingPanel.transform.Find("Panel/Buttons/NextButton/Information2").GetComponent<Text>().text = "Menu";
+                finishingPanel.transform.Find("Panel/Buttons/NextButton/Information2").GetComponent<Text>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "menu");
                 finishingPanel.transform.Find("Panel/Buttons/NextButton").gameObject.GetComponent<Button>().onClick.AddListener(() => gameObject.GetComponent<UI_InGame_Manager>().exitButtonPressed());
             }
             else
@@ -184,45 +185,45 @@ public class FluidGameManager : MonoBehaviour
                 string resultadoPrueba = "";
                 if (particleCounter >= 190)
                 {
-                    resultadoPrueba = "¡Los estás haciendo excelente!";
+                    resultadoPrueba = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "highResultText");
                     SessionManager.instance.SumarPuntosAlTotal(100);
                 }
                 else if (particleCounter >= 150)
                 {
-                    resultadoPrueba = "¡Vas mejorando!";
+                    resultadoPrueba = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "midResultText");
                     SessionManager.instance.SumarPuntosAlTotal(50);
                 }
                 else if (particleCounter >= 1)
                 {
-                    resultadoPrueba = "¡Ánimo! ¡Sigue así!";
+                    resultadoPrueba = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "lowResultText");
                     SessionManager.instance.SumarPuntosAlTotal(25);
                 }
                 else
                 {
-                    resultadoPrueba = "¡Vuelve a intentarlo! ¡Tu puedes!";
+                    resultadoPrueba = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "failResultText");
                 }
 
                 SessionManager.instance.sucesionDeJuegos.RemoveAt(0);
                 //Editando titulo de la pantalla final
                 int completed = SessionManager.instance.totalGamesInSession - SessionManager.instance.sucesionDeJuegos.Count;
-                finishingPanel.transform.Find("Panel/Title").gameObject.GetComponent<Text>().text = "¡Terminado! " + completed + " / " + SessionManager.instance.totalGamesInSession;
+                finishingPanel.transform.Find("Panel/Title").gameObject.GetComponent<Text>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "endText") + " " + completed + " / " + SessionManager.instance.totalGamesInSession;
 
                 //Editando texto de resultado
                 // finishingPanel.transform.Find("Panel/Information/PointsText").gameObject.GetComponent<Text>().text = "Resultado: ";
                 finishingPanel.transform.Find("Panel/Information/PointsText/ResolutionText").gameObject.GetComponent<Text>().text = resultadoPrueba;
 
                 //Editando texto de resultado adicional
-                finishingPanel.transform.Find("Panel/Information/AdditionalText").gameObject.GetComponent<Text>().text = "Gotas acertadas: " + particleCounter;
+                finishingPanel.transform.Find("Panel/Information/AdditionalText").gameObject.GetComponent<Text>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "drops") + " " + particleCounter;
 
                 //Editando texto de puntos
                 /*finishingPanel.transform.Find("Panel/Information/TimeText").gameObject.GetComponent<Text>().text = "Gotas falladas: "
                     + SessionManager.instance.puntosTotales + "/" + SessionManager.instance.puntosAConseguir;*/
                 double percent = (particleCounter / (particleCounter + failedDrops)) * 100;
-                finishingPanel.transform.Find("Panel/Information/TimeText").gameObject.GetComponent<Text>().text = "Litros acertados: "
-                    + liters.ToString("F2") + " litros";
+                finishingPanel.transform.Find("Panel/Information/TimeText").gameObject.GetComponent<Text>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "dataText") + " "
+                    + liters.ToString("F2") + " " + LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "litres");
 
                 finishingPanel.transform.Find("Panel/Buttons/NextButton").gameObject.GetComponent<Button>().onClick.AddListener(() => SessionManager.instance.chargeNextScene());
-                finishingPanel.transform.Find("Panel/Buttons/NextButton/Information2").GetComponent<Text>().text = "Siguiente";
+                finishingPanel.transform.Find("Panel/Buttons/NextButton/Information2").GetComponent<Text>().text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "next");
                 
             }
         }
@@ -236,7 +237,7 @@ public class FluidGameManager : MonoBehaviour
         {
             timeToShow = 0;
         }
-        timeText.text = Mathf.Floor(timeToShow).ToString("00");
+        timeText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "time") + " " + Mathf.Floor(timeToShow).ToString("00");
     }
 
     public void actualizarValorSlider(int newCount)
@@ -246,7 +247,7 @@ public class FluidGameManager : MonoBehaviour
         float valueToShow = particleCounter / 100;
         
         //percentageSlider.value = valueToShow;
-        percentageText.text = valueToShow.ToString("F2") + " Litros llenos";
+        percentageText.text = LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "dataText") + " " + valueToShow.ToString("F2") + " " + LocalizationSettings.StringDatabase.GetLocalizedString("UI Game Text", "litres");
     }
 
     public void actualizarFailedDrops(int newCount)
